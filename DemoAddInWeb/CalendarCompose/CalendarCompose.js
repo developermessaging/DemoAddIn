@@ -163,3 +163,16 @@ function getAccessToken() {
     });
 }
 
+
+function saveAsync() {
+    Office.context.mailbox.item.saveAsync(function (result) {
+        if (result.status === "succeeded") {
+            // Use this token to call Web API
+            var token = result.value;
+            $("#itemId").val(result.value);
+        } else {
+            $("#itemId").val("Error: " + result.error.code);
+        }
+    });
+}
+
