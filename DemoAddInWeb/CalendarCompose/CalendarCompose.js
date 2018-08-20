@@ -176,3 +176,6 @@ function saveAsync() {
     });
 }
 
+function saveCustomProperty() {
+
+}

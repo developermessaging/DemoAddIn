@@ -35,63 +35,71 @@
         <div class="ms-Grid-row">
             <div class="ms-Grid-col ms-u-sm12">
                 <h2 class="ms-font-l">Operations:</h2>
-                <div class="ms-Table">
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Required attendees</span>
-                    </div>
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <label>Name: </label><textarea id="requiredAttendeesNameId" style="width:100%"></textarea>
-                            <label>Email: </label><textarea id="requiredAttendeesEmailId" style="width:100%"></textarea>
-                        </span>
-                    </div>
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <button type="button" onclick="requiredAttendeesAddAsync();" id="requiredAttendeesAddAsyncBtn" style="width:100%">Add Required Attendees</button>
-                            <button type="button" onclick="requiredAttendeesSetAsync();" id="requiredAttendeesSetAsyncBtn" style="width:100%">Set Required Attendees</button>
-                        </span>
-                    </div>
-                    <hr />
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Get a callback token</span>
+				<div class="ms-Table">
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Required attendees</span>
+					</div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<label>Name: </label><textarea id="requiredAttendeesNameId" style="width:100%"></textarea>
+							<label>Email: </label><textarea id="requiredAttendeesEmailId" style="width:100%"></textarea>
+						</span>
+					</div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<button type="button" onclick="requiredAttendeesAddAsync();" id="requiredAttendeesAddAsyncBtn" style="width:100%">Add Required Attendees</button>
+							<button type="button" onclick="requiredAttendeesSetAsync();" id="requiredAttendeesSetAsyncBtn" style="width:100%">Set Required Attendees</button>
+						</span>
+					</div>
+					<hr />
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Get a callback token</span>
 
-                    </div>
-
-
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="callbackTokenId" style="width:100%"></textarea>
-                            <button type="button" onclick="getCallbackToken();" id="getCallbackTokenBtn" style="width:100%">Get Callback Token</button>
-                        </span>
-                    </div>
-                    <hr />
-
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Get an access token</span>
-
-                    </div>
+					</div>
 
 
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="accessTokenId" style="width:100%">Not yet implemented</textarea>
-                            <button type="button" onclick="getAccessToken();" id="getAccessTokenBtn" style="width:100%" disabled>Get Access Token</button>
-                        </span>
-                    </div>
-                    <hr />
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Save Async / Item Id</span>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="callbackTokenId" style="width:100%"></textarea>
+							<button type="button" onclick="getCallbackToken();" id="getCallbackTokenBtn" style="width:100%">Get Callback Token</button>
+						</span>
+					</div>
+					<hr />
 
-                    </div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Get an access token</span>
+
+					</div>
 
 
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="itemId" style="width:100%"></textarea>
-                            <button type="button" onclick="saveAsync();" id="saveAsyncBtn" style="width:100%">Save Async</button>
-                        </span>
-                    </div>
-                </div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="accessTokenId" style="width:100%">Not yet implemented</textarea>
+							<button type="button" onclick="getAccessToken();" id="getAccessTokenBtn" style="width:100%" disabled>Get Access Token</button>
+						</span>
+					</div>
+					<hr />
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Save Async / Item Id</span>
+
+					</div>
+
+
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="itemId" style="width:100%"></textarea>
+							<button type="button" onclick="saveAsync();" id="saveAsyncBtn" style="width:100%">Save Async</button>
+						</span>
+					</div>
+
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="customPropName" style="width:100%"></textarea>
+							<textarea id="customPropValue" style="width:100%"></textarea>
+							<button type="button" onclick="saveCustomProperty();" id="saveCustomPropBtn" style="width:100%">Save Property</button>
+						</span>
+					</div>
+				</div>
             </div>
         </div>
 
