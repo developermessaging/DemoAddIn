@@ -1,94 +1,132 @@
 ﻿(function () {
-  "use strict";
+    "use strict";
 
-  var messageBanner;
+    var messageBanner;
 
-  // The Office initialize function must be run each time a new page is loaded.
-  Office.initialize = function (reason) {
-    $(document).ready(function () {
-      var element = document.querySelector('.ms-MessageBanner');
-      messageBanner = new fabric.MessageBanner(element);
-      messageBanner.hideBanner();
-      loadProps();
-    });
-  };
+    // The Office initialize function must be run each time a new page is loaded.
+    Office.initialize = function (reason) {
+        $(document).ready(function () {
+            var element = document.querySelector('.ms-MessageBanner');
+            messageBanner = new fabric.MessageBanner(element);
+            messageBanner.hideBanner();
+            // Set up ItemChanged event
+            Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, itemChanged);
+            loadProps();
+        });
+    };
 
-  // Take an array of AttachmentDetails objects and build a list of attachment names, separated by a line-break.
-  function buildAttachmentsString(attachments) {
-    if (attachments && attachments.length > 0) {
-      var returnString = "";
-      
-      for (var i = 0; i < attachments.length; i++) {
-        if (i > 0) {
-          returnString = returnString + "<br/>";
+    // Take an array of AttachmentDetails objects and build a list of attachment names, separated by a line-break.
+    function buildAttachmentsString(attachments) {
+        if (attachments && attachments.length > 0) {
+            var returnString = "";
+
+            for (var i = 0; i < attachments.length; i++) {
+                if (i > 0) {
+                    returnString = returnString + "<br/>";
+                }
+                returnString = returnString + attachments[i].name;
+            }
+
+            return returnString;
         }
-        returnString = returnString + attachments[i].name;
-      }
 
-      return returnString;
+        return "None";
     }
 
-    return "None";
-  }
-
-  // Format an EmailAddressDetails object as
-  // GivenName Surname <emailaddress>
-  function buildEmailAddressString(address) {
-    return address.displayName + " &lt;" + address.emailAddress + "&gt;";
-  }
-
-  // Take an array of EmailAddressDetails objects and
-  // build a list of formatted strings, separated by a line-break
-  function buildEmailAddressesString(addresses) {
-    if (addresses && addresses.length > 0) {
-      var returnString = "";
-
-      for (var i = 0; i < addresses.length; i++) {
-        if (i > 0) {
-          returnString = returnString + "<br/>";
-        }
-        returnString = returnString + buildEmailAddressString(addresses[i]);
-      }
-
-      return returnString;
+    function itemChanged(eventArgs) {
+        // Update UI based on the new current item
+        loadProps();
     }
 
-    return "None";
-  }
 
-  // Load properties from the Item base object, then load the
-  // message-specific properties.
-  function loadProps() {
-    var item = Office.context.mailbox.item;
+    // Format an EmailAddressDetails object as
+    // GivenName Surname <emailaddress>
+    function buildEmailAddressString(address) {
+        return address.displayName + " &lt;" + address.emailAddress + "&gt;";
+    }
 
-    $('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
-    $('#dateTimeModified').text(item.dateTimeModified.toLocaleString());
-    $('#itemClass').text(item.itemClass);
-    $('#itemId').text(item.itemId);
-    $('#itemType').text(item.itemType);
+    // Take an array of EmailAddressDetails objects and
+    // build a list of formatted strings, separated by a line-break
+    function buildEmailAddressesString(addresses) {
+        if (addresses && addresses.length > 0) {
+            var returnString = "";
 
-    $('#message-props').show();
+            for (var i = 0; i < addresses.length; i++) {
+                if (i > 0) {
+                    returnString = returnString + "<br/>";
+                }
+                returnString = returnString + buildEmailAddressString(addresses[i]);
+            }
 
-    $('#attachments').html(buildAttachmentsString(item.attachments));
-    $('#cc').html(buildEmailAddressesString(item.cc));
-    $('#conversationId').text(item.conversationId);
-    $('#from').html(buildEmailAddressString(item.from));
-    $('#internetMessageId').text(item.internetMessageId);
-    $('#normalizedSubject').text(item.normalizedSubject);
-    $('#sender').html(buildEmailAddressString(item.sender));
-    $('#subject').text(item.subject);
-    $('#to').html(buildEmailAddressesString(item.to));
-  }
+            return returnString;
+        }
+
+        return "None";
+    }
+
+    // Load properties from the Item base object, then load the
+    // message-specific properties.
+    function loadProps() {
+        var item = Office.context.mailbox.item;
+
+        $('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
+        $('#dateTimeModified').text(item.dateTimeModified.toLocaleString());
+        $('#itemClass').text(item.itemClass);
+        $('#itemId').text(item.itemId);
+        $('#itemType').text(item.itemType);
+
+        $('#message-props').hide();
+        $('#appointment-props').hide();
+
+        if (item.itemType == Office.MailboxEnums.ItemType.Appointment) {
+            loadAppointmentProps(item);
+        }
+        else {
+            loadMessageProps(item);
+        }
+    }
+
+    loadMessageProps(item)
+    {
+        $('#message-props').show();
+
+        $('#attachments').html(buildAttachmentsString(item.attachments));
+        $('#cc').html(buildEmailAddressesString(item.cc));
+        $('#conversationId').text(item.conversationId);
+        $('#from').html(buildEmailAddressString(item.from));
+        $('#internetMessageId').text(item.internetMessageId);
+        $('#normalizedSubject').text(item.normalizedSubject);
+        $('#sender').html(buildEmailAddressString(item.sender));
+        $('#subject').text(item.subject);
+        $('#to').html(buildEmailAddressesString(item.to));
+
+    }
 
 
+    // Load properties from an Appointment object
+    function loadAppointmentProps(item) {
+        $('#appointment-props').show();
 
-  // Helper function for displaying notifications
-  function showNotification(header, content) {
-    $("#notificationHeader").text(header);
-    $("#notificationBody").text(content);
-    messageBanner.showBanner();
-    messageBanner.toggleExpansion();
-  }
+        $('#appt-attachments').html(buildAttachmentsString(item.attachments));
+        $('#end').text(item.end.toLocaleString());
+        $('#location').text(item.location);
+        $('#appt-normalizedSubject').text(item.normalizedSubject);
+        $('#optionalAttendees').html(buildEmailAddressesString(item.optionalAttendees));
+        $('#organizer').html(buildEmailAddressString(item.organizer));
+        $('#requiredAttendees').html(buildEmailAddressesString(item.requiredAttendees));
+        $('#resources').html(buildEmailAddressesString(item.resources));
+        $('#start').text(item.start.toLocaleString());
+        $('#appt-subject').text(item.subject);
+    }
+
+
+    // Helper function for displaying notifications
+    function showNotification(header, content) {
+        $("#notificationHeader").text(header);
+        $("#notificationBody").text(content);
+        messageBanner.showBanner();
+        messageBanner.toggleExpansion();
+    }
 })();
 
 function displayMessageForm() {
