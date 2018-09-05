@@ -78,6 +78,7 @@
         $('#message-props').hide();
         $('#appointment-props').hide();
 
+        
         if (item.itemType == Office.MailboxEnums.ItemType.Appointment) {
             loadAppointmentProps(item);
         }
@@ -86,7 +87,7 @@
         }
     }
 
-    loadMessageProps(item)
+    function loadMessageProps(item)
     {
         $('#message-props').show();
 
@@ -99,6 +100,8 @@
         $('#sender').html(buildEmailAddressString(item.sender));
         $('#subject').text(item.subject);
         $('#to').html(buildEmailAddressesString(item.to));
+
+        item.body.getAsync('text', function (async) { $('#body').html(async.value); $('#bodylength').html(async.value.length); });
 
     }
 
