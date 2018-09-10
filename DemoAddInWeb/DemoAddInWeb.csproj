@@ -133,6 +133,8 @@
     <Content Include="Images\Icon32.png" />
     <Content Include="Images\Icon64.png" />
     <Content Include="Images\Icon80.png" />
+    <Content Include="MessageRead\Dialog.html" />
+    <Content Include="MessageRead\DialogHelper.js" />
     <Content Include="MessageRead\MessageRead.css" />
     <Content Include="MessageRead\MessageRead.html" />
     <Content Include="MessageRead\MessageRead.js" />

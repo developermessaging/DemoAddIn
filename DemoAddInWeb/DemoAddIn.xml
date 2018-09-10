@@ -15,7 +15,9 @@
   <DisplayName DefaultValue="DemoAddIn" />
   <Description DefaultValue="DemoAddIn"/>
   <IconUrl DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon64.png"/>
-
+  <AppDomains>
+    <AppDomain>https://www.google.com </AppDomain>
+  </AppDomains>
 
   <Hosts>
     <Host Name="Mailbox" />
