@@ -145,12 +145,6 @@ function cb(asyncResult) {
     $("#callbackTokenId").val(token);
 }
 
-
-function cb(asyncResult) {
-    var token = asyncResult.value;
-    $("#callbackTokenId").val(token);
-}
-
 function getAccessToken() {
     Office.context.auth.getAccessTokenAsync(function (result) {
         if (result.status === "succeeded") {

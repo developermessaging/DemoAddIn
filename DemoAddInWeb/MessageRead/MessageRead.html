@@ -38,62 +38,74 @@
         <div class="ms-Grid-row">
             <div class="ms-Grid-col ms-u-sm12">
                 <h2 class="ms-font-l">Operations:</h2>
-                <div class="ms-Table">
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Display a message with a given ID</span>
-                    </div>
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="specificItemId" style="width:100%"></textarea>
-                            <button type="button" onclick="displayMessageForm();" id="dispmsgformbtn" style="width:100%">Display Message Form</button>
-                        </span>
-                    </div>
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <button type="button" onclick="displayDialogAsync();" id="dispdlgasyncbtn" style="width:100%">Display Dialog</button>
-                        </span>
-                    </div>
-                    <hr />
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Get a callback token</span>
+				<div class="ms-Table">
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Display a message with a given ID</span>
+					</div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="specificItemId" style="width:100%"></textarea>
+							<button type="button" onclick="displayMessageForm();" id="dispmsgformbtn" style="width:100%">Display Message Form</button>
+						</span>
+					</div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<button type="button" onclick="displayDialogAsync();" id="dispdlgasyncbtn" style="width:100%">Display Dialog</button>
+						</span>
+					</div>
+					<hr />
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Get a callback token</span>
 
-                    </div>
-
-
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="callbackTokenId" style="width:100%"></textarea>
-                            <button type="button" onclick="getCallbackToken();" id="getCallbackTokenBtn" style="width:100%">Get Callback Token</button>
-                        </span>
-                    </div>
-                    <hr />
-
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Get an access token</span>
-
-                    </div>
+					</div>
 
 
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="accessTokenId" style="width:100%">Not yet implemented</textarea>
-                            <button type="button" onclick="getAccessToken();" id="getAccessTokenBtn" style="width:100%" disabled>Get Access Token</button>
-                        </span>
-                    </div>
-                    <hr />
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Save Async / Item Id</span>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="callbackTokenId" style="width:100%"></textarea>
+							<button type="button" onclick="getCallbackToken();" id="getCallbackTokenBtn" style="width:100%">Get Callback Token</button>
+						</span>
+					</div>
+					<hr />
 
-                    </div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Get an access token</span>
+
+					</div>
 
 
-                    <div class="ms-Table-row">
-                        <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="itemId" style="width:100%"></textarea>
-                            <button type="button" onclick="saveAsync();" id="saveAsyncBtn" style="width:100%">Save Async</button>
-                        </span>
-                    </div>
-                </div>
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="accessTokenId" style="width:100%">Not yet implemented</textarea>
+							<button type="button" onclick="getAccessToken();" id="getAccessTokenBtn" style="width:100%" disabled>Get Access Token</button>
+						</span>
+					</div>
+
+					<hr />
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Send EWS Request</span>
+					</div>                    <hr />
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="ewsRequest" style="width:100%"></textarea>
+							<button type="button" onclick="sendEWSRequest();" id="sendEWSRequestBtn" style="width:100%">Send EWS Request</button>
+							<textarea id="ewsResponse" style="width:100%"></textarea>
+						</span>
+					</div>
+
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell">Save Async / Item Id</span>
+
+					</div>
+
+
+					<div class="ms-Table-row">
+						<span class="ms-Table-cell ms-fontWeight-semibold">
+							<textarea id="itemId" style="width:100%"></textarea>
+							<button type="button" onclick="saveAsync();" id="saveAsyncBtn" style="width:100%">Save Async</button>
+						</span>
+					</div>
+				</div>
             </div>
         </div>
         <div class="ms-Grid-row">

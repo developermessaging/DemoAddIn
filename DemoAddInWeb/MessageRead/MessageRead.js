@@ -242,6 +242,12 @@ function getAccessToken() {
     });
 }
 
+function sendEWSRequest() {
+	Office.context.mailbox.makeEwsRequestAsync($("#ewsRequest").value, function (result) {
+		$("#ewsRequest").val(result.value);
+	});
+}
+
 function saveAsync() {
     Office.context.mailbox.item.saveAsync(function (result) {
         if (result.status === "succeeded") {
