@@ -73,7 +73,7 @@
         $('#dateTimeModified').text(item.dateTimeModified.toLocaleString());
         $('#itemClass').text(item.itemClass);
 		$('#itemId').text(item.itemId);
-		$('#ewsRequest').text(getSubjectRequest(item.itemId));
+		$('#ewsRequest').text(getSubjectEWSRequest(item.itemId));
         $('#itemType').text(item.itemType);
 
         $('#message-props').hide();
