@@ -72,7 +72,8 @@
         $('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
         $('#dateTimeModified').text(item.dateTimeModified.toLocaleString());
         $('#itemClass').text(item.itemClass);
-        $('#itemId').text(item.itemId);
+		$('#itemId').text(item.itemId);
+		$('#ewsRequest').text(getSubjectRequest(item.itemId));
         $('#itemType').text(item.itemType);
 
         $('#message-props').hide();
@@ -240,6 +241,33 @@ function getAccessToken() {
             $("#accessTokenId").val("Error: " + result.error.code);
         }
     });
+}
+
+function getSubjectEWSRequest(id) {
+	// Return a GetItem operation request for the subject of the specified item.
+	var request =
+		'<?xml version="1.0" encoding="utf-8"?>' +
+		'<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+		'               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
+		'               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
+		'               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
+		'  <soap:Header>' +
+		'    <RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" soap:mustUnderstand="0" />' +
+		'  </soap:Header>' +
+		'  <soap:Body>' +
+		'    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
+		'      <ItemShape>' +
+		'        <t:BaseShape>IdOnly</t:BaseShape>' +
+		'        <t:AdditionalProperties>' +
+		'            <t:FieldURI FieldURI="item:Subject"/>' +
+		'        </t:AdditionalProperties>' +
+		'      </ItemShape>' +
+		'      <ItemIds><t:ItemId Id="' + id + '"/></ItemIds>' +
+		'    </GetItem>' +
+		'  </soap:Body>' +
+		'</soap:Envelope>';
+
+	return request;
 }
 
 function sendEWSRequest() {
