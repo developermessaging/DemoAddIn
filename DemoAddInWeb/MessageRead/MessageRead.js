@@ -9,9 +9,13 @@
             var element = document.querySelector('.ms-MessageBanner');
             messageBanner = new fabric.MessageBanner(element);
             messageBanner.hideBanner();
-            // Set up ItemChanged event
-            Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, itemChanged);
-            loadProps();
+			loadProps();
+
+			// The following function doesn't work in some API sets (e.g. Exchange 2013)
+			if (Office.context.mailbox.addHandlerAsync !== undefined) {
+				// Set up ItemChanged event
+				Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, itemChanged);
+			}
         });
     };
 
@@ -69,11 +73,11 @@
     function loadProps() {
         var item = Office.context.mailbox.item;
 
-        $('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
+		$('#ewsRequest').text(getSubjectEWSRequest(item.itemId));
+		$('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
         $('#dateTimeModified').text(item.dateTimeModified.toLocaleString());
         $('#itemClass').text(item.itemClass);
 		$('#itemId').text(item.itemId);
-		$('#ewsRequest').text(getSubjectEWSRequest(item.itemId));
         $('#itemType').text(item.itemType);
 
         $('#message-props').hide();
@@ -102,8 +106,10 @@
         $('#subject').text(item.subject);
         $('#to').html(buildEmailAddressesString(item.to));
 
-        item.body.getAsync('text', function (async) { $('#body').html(async.value); $('#bodylength').html(async.value.length); });
-
+		// The following function doesn't work in some API sets (e.g. Exchange 2013)
+		if (item.body !== undefined) {
+			item.body.getAsync('text', function (async) { $('#body').html(async.value); $('#bodylength').html(async.value.length); });
+		}
     }
 
 
@@ -271,14 +277,37 @@ function getSubjectEWSRequest(id) {
 }
 
 function sendEWSRequest() {
-	Office.context.mailbox.makeEwsRequestAsync($("#ewsRequest").value, function (result) {
-		$("#ewsRequest").val(result.value);
-	});
+	$("#ewsResponse").text('Reading request');
+	var requestXml = $("#ewsRequest").val();
+	$("#ewsResponse").text('Request read');
+	if (requestXml.length > 10) {
+		$("#ewsResponse").text('Sending request, length is ' + requestXml.length);
+		result = Office.context.mailbox.makeEwsRequestAsync(requestXml, sendEWSRequestCallback);
+		if (result == null) {
+			$("#ewsResponse").text('Failed to send request');
+		} else {
+			$("#ewsResponse").text('Request sent');
+		}
+	}
+	else {
+		$("#ewsResponse").text('Invalid request');
+	}
 }
+
+function sendEWSRequestCallback(asyncResult) {
+	var result = asyncResult.value;
+	var context = asyncResult.asyncContext;
+
+	$("#ewsResponse").val('Response received (' + asyncResult.status + ')');
+	if (asyncResult.status === "succeeded") {
+		$("#ewsResponse").text(result);
+	} else {
+		$("#ewsResponse").text("Error: " + asyncResult.error.message);
+	}}
 
 function saveAsync() {
     Office.context.mailbox.item.saveAsync(function (result) {
-        if (result.status === "succeeded") {
+        if (result.status == "succeeded") {
             // Use this token to call Web API
             var token = result.value;
             $("#itemId").val(result.value);
@@ -295,4 +324,4 @@ function showNotification(header, content) {
     var element = document.querySelector('.ms-MessageBanner');
     messageBanner = new fabric.MessageBanner(element);
     messageBanner.showBanner();
-    }
+ }

@@ -8,7 +8,7 @@
   <Id>3b3792eb-7b0e-47b8-981f-1e26aa35f805</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change. -->
-  <Version>1.0.0.0</Version>
+  <Version>1.0.0.1</Version>
   <ProviderName>[Provider name]</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
@@ -34,7 +34,7 @@
     </Form>
   </FormSettings>
 
-  <Permissions>ReadWriteItem</Permissions>
+  <Permissions>ReadWriteMailbox</Permissions>
   <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
 

@@ -21,7 +21,7 @@
     <ProjectMode>MailApp</ProjectMode>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <MinimumOfficeToolsVersion>14.0</MinimumOfficeToolsVersion>
-    <ActivePublishProfile>dsmsgeuaddin - Web Deploy %282%29</ActivePublishProfile>
+    <ActivePublishProfile>dsmsgeu-demoaddin - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
