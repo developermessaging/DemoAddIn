@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Created:ce44715c-8c4e-446b-879c-ea9ebe0f09c8-->
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="MailApp">
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" 
+           xsi:type="MailApp">
 
   <!-- Begin Basic Settings: Add-in metadata, used for all versions of Office unless override provided. -->
 
@@ -14,7 +18,7 @@
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
   <DisplayName DefaultValue="DemoAddIn" />
   <Description DefaultValue="DemoAddIn"/>
-  <IconUrl DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon64.png"/>
+  <IconUrl DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon64.png"/>
   <AppDomains>
     <AppDomain>https://www.google.com </AppDomain>
   </AppDomains>
@@ -30,23 +34,23 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead/MessageRead.html"/>
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Forms/MessageRead/MessageRead.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>
-        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead/MessageRead.html" />
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Forms/MessageRead/MessageRead.html" />
         <RequestedHeight>450</RequestedHeight> 
       </TabletSettings>
       <PhoneSettings>
-        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead/MessageRead.html" />
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Forms/MessageRead/MessageRead.html" />
       </PhoneSettings>
     </Form>
   </FormSettings>
 
   <Permissions>ReadWriteMailbox</Permissions>
   <Rule xsi:type="RuleCollection" Mode="Or">
-    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />
-    <Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Edit" />
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="ReadOrEdit" />
+    <Rule xsi:type="ItemIs" ItemType="Appointment" FormType="ReadOrEdit" />
   </Rule>
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
 
@@ -90,6 +94,35 @@
               </Group>
             </OfficeTab>
           </ExtensionPoint>
+
+          <!-- Message Read -->
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <!-- Use the default tab of the ExtensionPoint or create your own with <CustomTab id="myTab"> -->
+            <OfficeTab id="TabDefault">
+              <!-- Up to 6 Groups added per Tab -->
+              <Group id="msgComposeGroup">
+                <Label resid="groupLabel" />
+                <!-- Launch the add-in : task pane button -->
+                <Control xsi:type="Button" id="msgComposeOpenPaneButton">
+                  <Label resid="paneComposeButtonLabel" />
+                  <Supertip>
+                    <Title resid="paneComposeSuperTipTitle" />
+                    <Description resid="paneComposeSuperTipDescription" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="icon16" />
+                    <bt:Image size="32" resid="icon32" />
+                    <bt:Image size="80" resid="icon80" />
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="messageComposeTaskPaneUrl" />
+                  </Action>
+                </Control>
+                <!-- Go to http://aka.ms/ButtonCommands to learn how to add more Controls: ExecuteFunction and Menu -->
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+          
           <!-- Go to http://aka.ms/ExtensionPointsCommands to learn how to add more Extension Points: MessageRead, AppointmentOrganizer, AppointmentAttendee -->
         </DesktopFormFactor>
       </Host>
@@ -103,16 +136,21 @@
       </bt:Images>
       <bt:Urls>
         <bt:Url id="functionFile" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Functions/FunctionFile.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead/MessageRead.html"/>
+        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html"/>
+        <bt:Url id="messageComposeTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageComposeCommandSurface/MessageCompose.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="Demo Add-in"/>
         <bt:String id="customTabLabel"  DefaultValue="Demo Add-in"/>
         <bt:String id="paneReadButtonLabel" DefaultValue="Demo Add-in"/>
+        <bt:String id="paneComposeButtonLabel" DefaultValue="Demo Add-in"/>
         <bt:String id="paneReadSuperTipTitle" DefaultValue="Run Demo Add-in"/>
+        <bt:String id="paneComposeSuperTipTitle" DefaultValue="Run Demo Add-in"/>
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="paneReadSuperTipDescription" DefaultValue="Opens a pane displaying all available properties. This is an example of a button that opens a task pane."/>
+        <bt:String id="paneComposeSuperTipDescription" DefaultValue="Opens a pane displaying all available properties. This is an example of a button that opens a task pane."/>
+
       </bt:LongStrings>
     </Resources>
 
@@ -179,7 +217,7 @@
                       <bt:Image size="80" resid="icon80" />
                     </Icon>
                     <Action xsi:type="ShowTaskpane">
-                      <SourceLocation resid="messageReadTaskPaneUrl" />
+                      <SourceLocation resid="messageComposeTaskPaneUrl" />
                       <SupportsPinning>true</SupportsPinning>
                     </Action>
                   </Control>
@@ -319,8 +357,9 @@
         </bt:Images>
         <bt:Urls>
           <bt:Url id="functionFile" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Functions/FunctionFile.html"/>
-          <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead/MessageRead.html"/>
-          <bt:Url id="calendarComposeTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/CalendarCompose/CalendarCompose.html"/>
+          <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html"/>
+          <bt:Url id="calendarComposeTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/AppointmentOrganizerCommandSurface/AppointmentOrganizer.html"/>
+           <bt:Url id="messageComposeTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageComposeCommandSurface/MessageCompose.html"/>
         </bt:Urls>
         <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="Demo Add-in"/>

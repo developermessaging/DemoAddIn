@@ -14,7 +14,7 @@
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
   <DisplayName DefaultValue="DemoAddIn" />
   <Description DefaultValue="DemoAddIn"/>
-  <IconUrl DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon64.png"/>
+  <IconUrl DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon64.png"/>
 
 
   <Hosts>
@@ -28,7 +28,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://dsmsgeuaddin.azurewebsites.net/MessageRead.html"/>
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -85,13 +85,13 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="icon16" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon16.png"/>
-        <bt:Image id="icon32" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon32.png"/>
-        <bt:Image id="icon80" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon80.png"/>
+        <bt:Image id="icon16" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon16.png"/>
+        <bt:Image id="icon32" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon32.png"/>
+        <bt:Image id="icon80" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="functionFile" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Functions/FunctionFile.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/MessageRead.html"/>
+        <bt:Url id="functionFile" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Functions/FunctionFile.html"/>
+        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
@@ -188,13 +188,13 @@
 
       <Resources>
         <bt:Images>
-          <bt:Image id="icon16" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon16.png"/>
-          <bt:Image id="icon32" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon32.png"/>
-          <bt:Image id="icon80" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Images/icon80.png"/>
+          <bt:Image id="icon16" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon16.png"/>
+          <bt:Image id="icon32" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon32.png"/>
+          <bt:Image id="icon80" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon80.png"/>
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="functionFile" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/Functions/FunctionFile.html"/>
-          <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeuaddin.azurewebsites.net/MessageRead.html"/>
+          <bt:Url id="functionFile" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Functions/FunctionFile.html"/>
+          <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead.html"/>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
