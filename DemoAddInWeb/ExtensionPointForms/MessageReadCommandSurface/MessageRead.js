@@ -84,7 +84,7 @@
         $('#appointment-props').hide();
 
         
-        if (item.itemType == Office.MailboxEnums.ItemType.Appointment) {
+        if (item.itemType === Office.MailboxEnums.ItemType.Appointment) {
             loadAppointmentProps(item);
         }
         else {
@@ -154,7 +154,7 @@ function displayDialogAsync() {
 
 var dialog;
 function dialogCallback(asyncResult) {
-    if (asyncResult.status == "failed") {
+    if (asyncResult.status === "failed") {
         // In addition to general system errors, there are 3 specific errors for 
         // displayDialogAsync that you can handle individually.
         switch (asyncResult.error.code) {
@@ -214,8 +214,8 @@ function displayMessageFormItemId(itemId) {
     Office.context.mailbox.displayMessageForm(itemId);
 }
 
-function getCallbackToken() {
-    Office.context.mailbox.getCallbackTokenAsync(function (result) {
+function getCallbackToken(isRest) {
+    Office.context.mailbox.getCallbackTokenAsync({ isRest }, function (result) {
         if (result.status === "succeeded") {
             // Use this token to call Web API
             var token = result.value;
@@ -225,12 +225,6 @@ function getCallbackToken() {
         }
     });
 }
-
-function cb(asyncResult) {
-    var token = asyncResult.value;
-    $("#callbackTokenId").val(token);
-}
-
 
 function cb(asyncResult) {
     var token = asyncResult.value;
@@ -283,7 +277,7 @@ function sendEWSRequest() {
 	if (requestXml.length > 10) {
 		$("#ewsResponse").text('Sending request, length is ' + requestXml.length);
 		result = Office.context.mailbox.makeEwsRequestAsync(requestXml, sendEWSRequestCallback);
-		if (result == null) {
+		if (result === null) {
 			$("#ewsResponse").text('Failed to send request');
 		} else {
 			$("#ewsResponse").text('Request sent');
@@ -307,7 +301,7 @@ function sendEWSRequestCallback(asyncResult) {
 
 function saveAsync() {
     Office.context.mailbox.item.saveAsync(function (result) {
-        if (result.status == "succeeded") {
+        if (result.status === "succeeded") {
             // Use this token to call Web API
             var token = result.value;
             $("#itemId").val(result.value);
