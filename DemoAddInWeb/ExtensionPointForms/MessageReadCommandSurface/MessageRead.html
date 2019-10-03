@@ -38,6 +38,7 @@
             <div class="ms-Grid-col ms-u-sm12">
                 <h2 class="ms-font-l">Operations:</h2>
                 <div class="ms-Table">
+                    <hr />
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Display a message with a given ID</span>
                     </div>
@@ -52,13 +53,11 @@
                             <button type="button" onclick="displayDialogAsync();" id="dispdlgasyncbtn" style="width:100%">Display Dialog</button>
                         </span>
                     </div>
+
                     <hr />
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Get a callback token</span>
-
                     </div>
-
-
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell ms-fontWeight-semibold">
                             <textarea id="callbackTokenId" style="width:100%"></textarea>
@@ -71,14 +70,11 @@
                             <button type="button" onclick="getEWSCallbackToken(false);" id="getEWSCallbackTokenBtn" style="width:100%">Get EWS Callback Token</button>
                         </span>
                     </div>
-                    <hr />
 
+                    <hr />
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Get an access token</span>
-
                     </div>
-
-
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell ms-fontWeight-semibold">
                             <textarea id="accessTokenId" style="width:100%">Not yet implemented</textarea>
@@ -99,17 +95,25 @@
                     </div>
 
                     <hr />
-
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Save Async / Item Id</span>
-
                     </div>
-
-
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell ms-fontWeight-semibold">
                             <textarea id="itemId" style="width:100%"></textarea>
                             <button type="button" onclick="saveAsync();" id="saveAsyncBtn" style="width:100%">Save Async</button>
+                        </span>
+                    </div>
+
+                    <hr />
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell">Attachment Editing</span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">
+                            <button type="button" onclick="removeAttachmentsButton();" id="removeAttachmentsButton" style="width:100%">Remove all attachments</button>
+                            <button type="button" onclick="removeAttachmentsRESTButton();" id="removeAttachmentsRESTButton" style="width:100%">Remove all attachments (REST)</button>
+                            <textarea id="attachmentsLog" style="width:100%"></textarea>
                         </span>
                     </div>
                     <hr />

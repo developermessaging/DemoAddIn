@@ -187,11 +187,38 @@ function toggleVisibility(toggleDivId) {
     }
 }
 
-function RemoveAttachments(callback) {
+function removeAttachmentsButton() {
+    //removeAttachments(removeAttachmentsCallback);
+    var item = Office.context.mailbox.item;
+    var log = "";
+    if (item.attachments.length > 0) {
+        // Remove the attachments
+        for (i = 0; i < item.attachments.length; i++) {
+            var attachment = item.attachments[i];
+            Office.context.mailbox.item.removeAttachmentAsync(
+                attachment.id,
+                { asyncContext: null },
+                function (asyncResult) {
+                    $("#attachmentsLog").text($("#attachmentsLog").val() + " " + attachment.name + " removed");
+                }
+            );
+        }
+    }
+    else {
+        $("#attachmentsLog").text("No attachments found");
+    }
+}
+
+function removeAttachmentsRESTButton() {
+    removeAttachments(removeAttachmentsCallback);
+}
+
+function removeAttachments(callback) {
+    var mailItemId = $('#itemId').val();
     Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (asyncResult) {
         if (asyncResult.status === "succeeded") {
             var getAttachmentsUrl = Office.context.mailbox.restUrl +
-                '/v2.0/me/messages/' + Office.context.mailbox.convertToRestId(mailItemId, Office.MailboxEnums.RestVersion.v2_0) + '/attachments';
+                '/v2.0/me/messages/' + Office.context.mailbox.convertToRestId(Office.context.mailbox.item.itemId, Office.MailboxEnums.RestVersion.v2_0) + '/attachments';
             $.ajax({
                 url: getAttachmentsUrl,
                 contentType: 'application/json',
@@ -210,7 +237,7 @@ function RemoveAttachments(callback) {
                 });
                 if (attachmentsList.length > 0) {
                     attachmentsList.forEach(function (attachment) {
-                        RemoveAttachment(attachment.Id, function (result) {
+                        removeAttachment(attachment.Id, function (result) {
                             if (result === false) {
                                 callback(false);
                             }
@@ -235,18 +262,17 @@ function RemoveAttachments(callback) {
 }
 
 function removeAttachmentsCallback(asyncResult) {
-    $("#ewsResponse").val('Response received (' + asyncResult.status + ')');
-    if (asyncResult.status === "succeeded") {
-        $("#ewsResponse").text(result);
+    if (asyncResult === true) {
+        $("#attachmentsLog").text("Attachment removed");
     } else {
-        $("#ewsResponse").text("Error: " + asyncResult.error.message);
+        $("#attachmentsLog").text("FAILED to remove attachment");
     }
 }
 
-function RemoveAttachment(attachmentId, callback) {
+function removeAttachment(attachmentId, callback) {
     Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (asyncResult) {
         if (asyncResult.status === "succeeded") {
-            var messageId = Office.context.mailbox.convertToRestId(mailItemId, Office.MailboxEnums.RestVersion.v2_0);
+            var messageId = Office.context.mailbox.convertToRestId(Office.context.mailbox.item.itemId, Office.MailboxEnums.RestVersion.v2_0);
             var removeAttachmentsUrl = Office.context.mailbox.restUrl +
                 '/v2.0/me/messages/' + messageId + '/attachments/' + attachmentId;
             $.ajax({
