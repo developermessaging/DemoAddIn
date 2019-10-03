@@ -67,8 +67,8 @@
                     </div>
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="callbackTokenId" style="width:100%"></textarea>
-                            <button type="button" onclick="getCallbackToken(false);" id="getCallbackTokenBtn" style="width:100%">Get EWS Callback Token</button>
+                            <textarea id="callbackEWSTokenId" style="width:100%"></textarea>
+                            <button type="button" onclick="getEWSCallbackToken(false);" id="getEWSCallbackTokenBtn" style="width:100%">Get EWS Callback Token</button>
                         </span>
                     </div>
                     <hr />
@@ -118,8 +118,8 @@
         </div>
         <div class="ms-Grid-row">
             <div class="ms-Grid-col ms-u-sm12">
-                <h2 class="ms-font-l">Office.context.mailbox.Item properties</h2>
-                <div class="ms-Table">
+                <h2 class="ms-font-l" onclick="toggleVisibility('itemPropertiesTable');">Office.context.mailbox.Item properties</h2>
+                <div class="ms-Table" id="itemPropertiesTable">
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Property</span>
                         <span class="ms-Table-cell">Value</span>
@@ -150,8 +150,8 @@
         <div class="ms-Grid-row">
             <div id="message-props" class="ms-Grid-row ">
                 <div class="ms-Grid-col ms-u-sm12">
-                    <h2 class="ms-font-l">Office.context.mailbox.Message properties</h2>
-                    <div class="ms-Table">
+                    <h2 class="ms-font-l" onclick="toggleVisibility('messagePropertiesTable');">Office.context.mailbox.Message properties</h2>
+                    <div class="ms-Table" id="messagePropertiesTable">
                         <div class="ms-Table-row">
                             <span class="ms-Table-cell">Property</span>
                             <span class="ms-Table-cell">Value</span>
@@ -208,8 +208,8 @@
         <div class="ms-Grid-row">
             <div id="appointment-props" class="ms-Grid-row ">
                 <div class="ms-Grid-col ms-u-sm12">
-                    <h2 class="ms-font-l">Appointment-specific properties</h2>
-                    <div class="ms-Table">
+                    <h2 class="ms-font-l"  onclick="toggleVisibility('appointmentPropertiesTable');">Appointment-specific properties</h2>
+                    <div class="ms-Table" id="appointmentPropertiesTable">
                         <div class="ms-Table-row">
                             <span class="ms-Table-cell">Property</span>
                             <span class="ms-Table-cell">Value</span>
@@ -261,7 +261,7 @@
     </div>
 
     <!-- FabricUI component used for displaying notifications -->
-    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;">
+    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;display:none;">
         <div class="ms-MessageBanner-content">
             <div class="ms-MessageBanner-text">
                 <div class="ms-MessageBanner-clipper">

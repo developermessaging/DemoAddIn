@@ -6,16 +6,10 @@
     // The Office initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
+            loadProps();
             var element = document.querySelector('.ms-MessageBanner');
             messageBanner = new fabric.MessageBanner(element);
             messageBanner.hideBanner();
-			loadProps();
-
-			// The following function doesn't work in some API sets (e.g. Exchange 2013)
-			if (Office.context.mailbox.addHandlerAsync !== undefined) {
-				// Set up ItemChanged event
-				Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, itemChanged);
-			}
         });
     };
 
@@ -36,12 +30,6 @@
 
         return "None";
     }
-
-    function itemChanged(eventArgs) {
-        // Update UI based on the new current item
-        loadProps();
-    }
-
 
     // Format an EmailAddressDetails object as
     // GivenName Surname <emailaddress>
@@ -73,17 +61,17 @@
     function loadProps() {
         var item = Office.context.mailbox.item;
 
-		$('#ewsRequest').text(getSubjectEWSRequest(item.itemId));
-		$('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
+        $('#ewsRequest').text(getSubjectEWSRequest(item.itemId));
+        $('#dateTimeCreated').text(item.dateTimeCreated.toLocaleString());
         $('#dateTimeModified').text(item.dateTimeModified.toLocaleString());
         $('#itemClass').text(item.itemClass);
-		$('#itemId').text(item.itemId);
+        $('#itemId').text(item.itemId);
         $('#itemType').text(item.itemType);
 
         $('#message-props').hide();
         $('#appointment-props').hide();
 
-        
+
         if (item.itemType === Office.MailboxEnums.ItemType.Appointment) {
             loadAppointmentProps(item);
         }
@@ -92,8 +80,7 @@
         }
     }
 
-    function loadMessageProps(item)
-    {
+    function loadMessageProps(item) {
         $('#message-props').show();
 
         $('#attachments').html(buildAttachmentsString(item.attachments));
@@ -106,10 +93,10 @@
         $('#subject').text(item.subject);
         $('#to').html(buildEmailAddressesString(item.to));
 
-		// The following function doesn't work in some API sets (e.g. Exchange 2013)
-		if (item.body !== undefined) {
-			item.body.getAsync('text', function (async) { $('#body').html(async.value); $('#bodylength').html(async.value.length); });
-		}
+        // The following function doesn't work in some API sets (e.g. Exchange 2013)
+        if (item.body !== undefined) {
+            item.body.getAsync('text', function (async) { $('#body').html(async.value); $('#bodylength').html(async.value.length); });
+        }
     }
 
 
@@ -128,20 +115,232 @@
         $('#start').text(item.start.toLocaleString());
         $('#appt-subject').text(item.subject);
     }
-
-
-    //// Helper function for displaying notifications
-    //function showNotification(header, content) {
-    //    $("#notificationHeader").text(header);
-    //    $("#notificationBody").text(content);
-    //    messageBanner.showBanner();
-    //    messageBanner.toggleExpansion();
-    //}
- })();
+})();
 
 function displayMessageForm() {
     if (!$("#specificItemId").val()) { $("#specificItemId").val(Office.context.mailbox.item.itemId); }
     displayMessageFormItemId($("#specificItemId").val());
+}
+
+function displayMessageFormItemId(itemId) {
+    Office.context.mailbox.displayMessageForm(itemId);
+}
+
+function getCallbackToken() {
+    Office.context.mailbox.getCallbackTokenAsync(function (result) {
+        if (result.status === "succeeded") {
+            // Use this token to call Web API
+            var token = result.value;
+            $("#callbackTokenId").val(token);
+        } else {
+            $("#callbackTokenId").val("Error: " + result.error.code);
+        }
+    });
+}
+
+function getEWSCallbackToken() {
+    $("#callbackEWSTokenId").val("Not implemented");
+}
+
+function getAccessToken() {
+    Office.context.auth.getAccessTokenAsync(getAccessTokenCallback);
+    //Office.context.auth.getAccessTokenAsync(function (result) {
+    //    if (result.status === "succeeded") {
+    //         Use this token to call Web API
+    //        var token = result.value;
+    //        $("#accessTokenId").val(token);
+    //    } else {
+    //        $("#accessTokenId").val("Error: " + result.error.code);
+    //    }
+    //});
+}
+
+
+function getAccessTokenCallback(asyncResult) {
+    var token = asyncResult.value;
+    $("#callbackTokenId").val(token);
+}
+
+function getBody() {
+    var coercionType = Office.CoercionType.Html;
+    if ($("#specificItemId").val() === "Text")
+        coercionType = Office.CoercionType.Text;
+    Office.context.mailbox.item.body.getAsync(coercionType, function (result) {
+        if (result.status === "succeeded") {
+            // Use this token to call Web API
+            var body = result.value;
+            $("#bodyId").val(body);
+        } else {
+            $("#bodyId").val("Error: " + result.error.code);
+        }
+    });
+}
+
+function toggleVisibility(toggleDivId) {
+    // Toggles the visibility of the specified element, depending upon button state
+
+    var elementToToggle = document.getElementById(toggleDivId);
+    if (elementToToggle.style.display === "none") {
+        elementToToggle.style.display = "block";
+    } else {
+        elementToToggle.style.display = "none";
+    }
+}
+
+function RemoveAttachments(callback) {
+    Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (asyncResult) {
+        if (asyncResult.status === "succeeded") {
+            var getAttachmentsUrl = Office.context.mailbox.restUrl +
+                '/v2.0/me/messages/' + Office.context.mailbox.convertToRestId(mailItemId, Office.MailboxEnums.RestVersion.v2_0) + '/attachments';
+            $.ajax({
+                url: getAttachmentsUrl,
+                contentType: 'application/json',
+                type: 'get',
+                headers: { 'Authorization': 'Bearer ' + asyncResult.value }
+            }).done(function (attachments) {
+                var attachmentsList = [];
+                var itemsProcessed = 0;
+                attachments.value.forEach(function (attachment) {
+                    if (attachment.Name !== "Mailplus.lqa") {
+                        attachmentsList.push({
+                            "Id": attachment.Id,
+                            "Name": attachment.Name
+                        });
+                    }
+                });
+                if (attachmentsList.length > 0) {
+                    attachmentsList.forEach(function (attachment) {
+                        RemoveAttachment(attachment.Id, function (result) {
+                            if (result === false) {
+                                callback(false);
+                            }
+                            itemsProcessed++;
+                            if (itemsProcessed === attachmentsList.length) {
+                                callback(true);
+                            }
+                        });
+                    });
+
+                } else {
+                    callback(true);
+                }
+            }).fail(function (error) {
+                callback(false);
+            });
+        }
+        else {
+            callback(false);
+        }
+    });
+}
+
+function removeAttachmentsCallback(asyncResult) {
+    $("#ewsResponse").val('Response received (' + asyncResult.status + ')');
+    if (asyncResult.status === "succeeded") {
+        $("#ewsResponse").text(result);
+    } else {
+        $("#ewsResponse").text("Error: " + asyncResult.error.message);
+    }
+}
+
+function RemoveAttachment(attachmentId, callback) {
+    Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (asyncResult) {
+        if (asyncResult.status === "succeeded") {
+            var messageId = Office.context.mailbox.convertToRestId(mailItemId, Office.MailboxEnums.RestVersion.v2_0);
+            var removeAttachmentsUrl = Office.context.mailbox.restUrl +
+                '/v2.0/me/messages/' + messageId + '/attachments/' + attachmentId;
+            $.ajax({
+                url: removeAttachmentsUrl,
+                contentType: 'application/json',
+                type: 'DELETE',
+                headers: { 'Authorization': 'Bearer ' + asyncResult.value }
+            }).done(function (result) {
+                console.log(result);
+                callback(true);
+            }).fail(function (error) {
+                console.log(error);
+                callback(false);
+            });
+        }
+    });
+}
+
+function getSubjectEWSRequest(id) {
+    // Return a GetItem operation request for the subject of the specified item.
+    var request =
+        '<?xml version="1.0" encoding="utf-8"?>' +
+        '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+        '               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
+        '               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
+        '               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
+        '  <soap:Header>' +
+        '    <RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" soap:mustUnderstand="0" />' +
+        '  </soap:Header>' +
+        '  <soap:Body>' +
+        '    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
+        '      <ItemShape>' +
+        '        <t:BaseShape>IdOnly</t:BaseShape>' +
+        '        <t:AdditionalProperties>' +
+        '            <t:FieldURI FieldURI="item:Subject"/>' +
+        '        </t:AdditionalProperties>' +
+        '      </ItemShape>' +
+        '      <ItemIds><t:ItemId Id="' + id + '"/></ItemIds>' +
+        '    </GetItem>' +
+        '  </soap:Body>' +
+        '</soap:Envelope>';
+
+    return request;
+}
+
+function sendEWSRequest() {
+    $("#ewsResponse").text('Reading request');
+    var requestXml = $("#ewsRequest").val();
+    $("#ewsResponse").text('Request read');
+    if (requestXml.length > 10) {
+        $("#ewsResponse").text('Sending request, length is ' + requestXml.length);
+        result = Office.context.mailbox.makeEwsRequestAsync(requestXml, sendEWSRequestCallback);
+        if (result === null) {
+            $("#ewsResponse").text('Failed to send request');
+        } else {
+            $("#ewsResponse").text('Request sent');
+        }
+    }
+    else {
+        $("#ewsResponse").text('Invalid request');
+    }
+}
+
+function sendEWSRequestCallback(asyncResult) {
+    var result = asyncResult.value;
+    var context = asyncResult.asyncContext;
+
+    $("#ewsResponse").val('Response received (' + asyncResult.status + ')');
+    if (asyncResult.status === "succeeded") {
+        $("#ewsResponse").text(result);
+    } else {
+        $("#ewsResponse").text("Error: " + asyncResult.error.message);
+    }
+}
+
+function saveAsync() {
+    Office.context.mailbox.item.saveAsync(function (result) {
+        if (result.status === "succeeded") {
+            // Use this token to call Web API
+            var token = result.value;
+            $("#itemId").val(result.value);
+        } else {
+            $("#itemId").val("Error: " + result.error.code);
+        }
+    });
+}
+
+// Helper function for displaying notifications
+function showNotification(header, content) {
+    $("#notificationHeader").text(header);
+    $("#notificationBody").text(content);
+    var element = document.querySelector('.ms-MessageBanner');
+    messageBanner = new fabric.MessageBanner(element);
+    messageBanner.showBanner();
 }
 
 function displayDialogAsync() {
@@ -174,7 +373,7 @@ function dialogCallback(asyncResult) {
     }
     else {
         dialog = asyncResult.value;
-        
+
         /*Messages are sent by developers programatically from the dialog using office.context.ui.messageParent(...)*/
         dialog.addEventHandler(Office.EventType.DialogMessageReceived, messageHandler);
 
@@ -182,140 +381,3 @@ function dialogCallback(asyncResult) {
         dialog.addEventHandler(Office.EventType.DialogEventReceived, eventHandler);
     }
 }
-
-function messageHandler(arg) {
-    dialog.close();
-    showNotification(arg.message);
-}
-
-
-function eventHandler(arg) {
-
-    // In addition to general system errors, there are 2 specific errors 
-    // and one event that you can handle individually.
-    switch (arg.error) {
-        case 12002:
-            showNotification("Cannot load URL, no such page or bad URL syntax.");
-            break;
-        case 12003:
-            showNotification("HTTPS is required.");
-            break;
-        case 12006:
-            // The dialog was closed, typically because the user the pressed X button.
-            showNotification("Dialog closed by user");
-            break;
-        default:
-            showNotification("Undefined error in dialog window");
-            break;
-    }
-}
-
-function displayMessageFormItemId(itemId) {
-    Office.context.mailbox.displayMessageForm(itemId);
-}
-
-function getCallbackToken(isRest) {
-    Office.context.mailbox.getCallbackTokenAsync({ isRest }, function (result) {
-        if (result.status === "succeeded") {
-            // Use this token to call Web API
-            var token = result.value;
-            $("#callbackTokenId").val(token);
-        } else {
-            $("#callbackTokenId").val("Error: " + result.error.code);
-        }
-    });
-}
-
-function cb(asyncResult) {
-    var token = asyncResult.value;
-    $("#callbackTokenId").val(token);
-}
-
-function getAccessToken() {
-    Office.context.auth.getAccessTokenAsync(function (result) {
-        if (result.status === "succeeded") {
-            // Use this token to call Web API
-            var token = result.value;
-            $("#accessTokenId").val(token);
-        } else {
-            $("#accessTokenId").val("Error: " + result.error.code);
-        }
-    });
-}
-
-function getSubjectEWSRequest(id) {
-	// Return a GetItem operation request for the subject of the specified item.
-	var request =
-		'<?xml version="1.0" encoding="utf-8"?>' +
-		'<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
-		'               xmlns:xsd="http://www.w3.org/2001/XMLSchema"' +
-		'               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"' +
-		'               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types">' +
-		'  <soap:Header>' +
-		'    <RequestServerVersion Version="Exchange2013" xmlns="http://schemas.microsoft.com/exchange/services/2006/types" soap:mustUnderstand="0" />' +
-		'  </soap:Header>' +
-		'  <soap:Body>' +
-		'    <GetItem xmlns="http://schemas.microsoft.com/exchange/services/2006/messages">' +
-		'      <ItemShape>' +
-		'        <t:BaseShape>IdOnly</t:BaseShape>' +
-		'        <t:AdditionalProperties>' +
-		'            <t:FieldURI FieldURI="item:Subject"/>' +
-		'        </t:AdditionalProperties>' +
-		'      </ItemShape>' +
-		'      <ItemIds><t:ItemId Id="' + id + '"/></ItemIds>' +
-		'    </GetItem>' +
-		'  </soap:Body>' +
-		'</soap:Envelope>';
-
-	return request;
-}
-
-function sendEWSRequest() {
-	$("#ewsResponse").text('Reading request');
-	var requestXml = $("#ewsRequest").val();
-	$("#ewsResponse").text('Request read');
-	if (requestXml.length > 10) {
-		$("#ewsResponse").text('Sending request, length is ' + requestXml.length);
-		result = Office.context.mailbox.makeEwsRequestAsync(requestXml, sendEWSRequestCallback);
-		if (result === null) {
-			$("#ewsResponse").text('Failed to send request');
-		} else {
-			$("#ewsResponse").text('Request sent');
-		}
-	}
-	else {
-		$("#ewsResponse").text('Invalid request');
-	}
-}
-
-function sendEWSRequestCallback(asyncResult) {
-	var result = asyncResult.value;
-	var context = asyncResult.asyncContext;
-
-	$("#ewsResponse").val('Response received (' + asyncResult.status + ')');
-	if (asyncResult.status === "succeeded") {
-		$("#ewsResponse").text(result);
-	} else {
-		$("#ewsResponse").text("Error: " + asyncResult.error.message);
-	}}
-
-function saveAsync() {
-    Office.context.mailbox.item.saveAsync(function (result) {
-        if (result.status === "succeeded") {
-            // Use this token to call Web API
-            var token = result.value;
-            $("#itemId").val(result.value);
-        } else {
-            $("#itemId").val("Error: " + result.error.code);
-        }
-    });
-}
-
-// Helper function for displaying notifications
-function showNotification(header, content) {
-    $("#notificationHeader").text(header);
-    $("#notificationBody").text(content);
-    var element = document.querySelector('.ms-MessageBanner');
-    messageBanner = new fabric.MessageBanner(element);
-    messageBanner.showBanner();
- }

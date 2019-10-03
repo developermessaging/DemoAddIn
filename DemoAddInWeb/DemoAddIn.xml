@@ -12,16 +12,17 @@
   <Id>d680a1c0-f7ce-40a6-998a-9f8fc469eeb4</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change. -->
-  <Version>1.0.0.1</Version>
+  <Version>1.0.0.8</Version>
   <ProviderName>Developer Support for Messaging @ Microsoft CSS</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
   <DisplayName DefaultValue="DemoAddIn" />
   <Description DefaultValue="DemoAddIn"/>
   <IconUrl DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Images/icon64.png"/>
+  <!--  Not sure why we'd need to load scripts from Google - can't find any such references, so commenting out with intention to remove
   <AppDomains>
     <AppDomain>https://www.google.com </AppDomain>
-  </AppDomains>
+  </AppDomains>-->
 
   <Hosts>
     <Host Name="Mailbox" />
@@ -34,15 +35,15 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Forms/MessageRead/MessageRead.html"/>
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html"/>
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>
-        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Forms/MessageRead/MessageRead.html" />
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html" />
         <RequestedHeight>450</RequestedHeight> 
       </TabletSettings>
       <PhoneSettings>
-        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Forms/MessageRead/MessageRead.html" />
+        <SourceLocation DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html" />
       </PhoneSettings>
     </Form>
   </FormSettings>

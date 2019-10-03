@@ -8,7 +8,7 @@
   <Id>3b3792eb-7b0e-47b8-981f-1e26aa35f805</Id>
 
   <!--Version. Updates from the store only get triggered if there is a version change. -->
-  <Version>1.0.0.1</Version>
+  <Version>1.0.0.2</Version>
   <ProviderName>[Provider name]</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
@@ -91,7 +91,7 @@
       </bt:Images>
       <bt:Urls>
         <bt:Url id="functionFile" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Functions/FunctionFile.html"/>
-        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead.html"/>
+        <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
@@ -194,7 +194,7 @@
         </bt:Images>
         <bt:Urls>
           <bt:Url id="functionFile" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/Functions/FunctionFile.html"/>
-          <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/MessageRead.html"/>
+          <bt:Url id="messageReadTaskPaneUrl" DefaultValue="https://dsmsgeu-demoaddin.azurewebsites.net/ExtensionPointForms/MessageReadCommandSurface/MessageRead.html"/>
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="groupLabel" DefaultValue="My Add-in Group"/>
