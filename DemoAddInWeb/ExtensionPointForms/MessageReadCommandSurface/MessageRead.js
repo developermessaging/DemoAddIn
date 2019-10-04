@@ -247,12 +247,10 @@ function removeAttachments(callback) {
                 var attachmentsList = [];
                 var itemsProcessed = 0;
                 attachments.value.forEach(function (attachment) {
-                    if (attachment.Name !== "Mailplus.lqa") {
-                        attachmentsList.push({
-                            "Id": attachment.Id,
-                            "Name": attachment.Name
-                        });
-                    }
+                    attachmentsList.push({
+                        "Id": attachment.Id,
+                        "Name": attachment.Name
+                    });
                 });
                 if (attachmentsList.length > 0) {
                     attachmentsList.forEach(function (attachment) {
@@ -289,6 +287,7 @@ function removeAttachmentsCallback(asyncResult) {
 }
 
 function removeAttachment(attachmentId, callback) {
+    log("Removing attachment " + attachmentId);
     Office.context.mailbox.getCallbackTokenAsync({ isRest: true }, function (asyncResult) {
         if (asyncResult.status === "succeeded") {
             var messageId = Office.context.mailbox.convertToRestId(Office.context.mailbox.item.itemId, Office.MailboxEnums.RestVersion.v2_0);
