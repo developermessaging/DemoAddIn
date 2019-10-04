@@ -159,14 +159,9 @@ function getCallbackToken() {
     });
 }
 
-function getEWSCallbackToken() {
-    $("#callbackEWSTokenId").val("Not implemented");
-}
-
 function getAccessToken() {
     log("Requesting access token");
     Office.context.auth.getAccessTokenAsync(getAccessTokenCallback);
-
 }
 
 function getAccessTokenCallback(asyncResult) {
