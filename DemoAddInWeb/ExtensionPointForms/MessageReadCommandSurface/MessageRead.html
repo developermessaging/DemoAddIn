@@ -27,18 +27,15 @@
     <!-- link rel="stylesheet" href="Content/fabric.components.min.css" -->
 </head>
 <body>
-    <div id="content-header">
-        <div class="padding">
-            <p class="ms-font-xl ms-fontColor-themeDarkAlt ms-fontWeight-semilight">All properties</p>
-
-        </div>
-    </div>
     <div id="content-main" class="ms-Grid">
         <div class="ms-Grid-row">
+            <div id="content-header">
+                <div class="padding">
+                    <p class="ms-font-xl ms-fontColor-themeDarkAlt ms-fontWeight-semilight">Operations</p>
+                </div>
+            </div>
             <div class="ms-Grid-col ms-u-sm12">
-                <h2 class="ms-font-l">Operations:</h2>
                 <div class="ms-Table">
-                    <hr />
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Display a message with a given ID</span>
                     </div>
@@ -56,12 +53,12 @@
 
                     <hr />
                     <div class="ms-Table-row">
-                        <span class="ms-Table-cell">Get a callback token</span>
+                        <span class="ms-Table-cell">Get a REST token</span>
                     </div>
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <textarea id="callbackTokenId" style="width:100%"></textarea>
-                            <button type="button" onclick="getCallbackToken(true);" id="getCallbackTokenBtn" style="width:100%">Get Rest Callback Token</button>
+                            <textarea id="RESTTokenId" style="width:100%"></textarea>
+                            <button type="button" onclick="getRESTToken(true);" id="getRESTTokenBtn" style="width:100%">Get REST Token</button>
                         </span>
                     </div>
 
@@ -109,15 +106,23 @@
                             <button type="button" onclick="removeAttachmentsRESTButton();" id="removeAttachmentsRESTButton" style="width:100%">Remove all attachments (REST)</button>
                         </span>
                     </div>
-                    <div class="ms-Table-row"><span class="ms-Table-cell">Note that you will not see the attachments removed when running in Outlook in cached mode until you switch out of the item then back again.  You also need to wait for Outlook's cache to update, which could take up to a minute.</span>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell">Note that you will not see the attachments removed when running in Outlook in cached mode until you switch out of the item then back again.  You also need to wait for Outlook's cache to update, which could take up to a minute.</span>
                     </div>
                     <hr />
                 </div>
+            </div>
+        </div>
+        <div id="content-header">
+            <div class="padding">
+                <p class="ms-font-xl ms-fontColor-themeDarkAlt ms-fontWeight-semilight">Item Properties</p>
+
+            </div>
         </div>
         <div class="ms-Grid-row">
             <div class="ms-Grid-col ms-u-sm12">
-                <h2 class="ms-font-l" onclick="toggleVisibility('itemPropertiesTable');">Office.context.mailbox.Item properties</h2>
-                <div class="ms-Table" id="itemPropertiesTable">
+                <h2 class="ms-font-l" onclick="toggleVisibility('itemPropertiesTable');">Office.context.mailbox.Item</h2>
+                <div class="ms-Table" id="itemPropertiesTable" style="display:none;">
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell">Property</span>
                         <span class="ms-Table-cell">Value</span>
@@ -145,140 +150,135 @@
                 </div>
             </div>
         </div>
-        <div class="ms-Grid-row">
-            <div id="message-props" class="ms-Grid-row ">
-                <div class="ms-Grid-col ms-u-sm12">
-                    <h2 class="ms-font-l" onclick="toggleVisibility('messagePropertiesTable');">Office.context.mailbox.Message properties</h2>
-                    <div class="ms-Table" id="messagePropertiesTable">
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell">Property</span>
-                            <span class="ms-Table-cell">Value</span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">attachments</span>
-                            <span id="attachments" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">cc</span>
-                            <span id="cc" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">conversationId</span>
-                            <span id="conversationId" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">from</span>
-                            <span id="from" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">internetMessageId</span>
-                            <span id="internetMessageId" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">normalizedSubject</span>
-                            <span id="normalizedSubject" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">sender</span>
-                            <span id="sender" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">subject</span>
-                            <span id="subject" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">to</span>
-                            <span id="to" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">body length</span>
-                            <span id="bodylength" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">body</span>
-                            <span id="body" class="ms-Table-cell"></span>
-                        </div>
+        <div class="ms-Grid-row" id="message-props">
+            <div class="ms-Grid-col ms-u-sm12">
+                <h2 class="ms-font-l" onclick="toggleVisibility('messagePropertiesTable');">Office.context.mailbox.Message</h2>
+                <div class="ms-Table" id="messagePropertiesTable" style="display:none;">
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell">Property</span>
+                        <span class="ms-Table-cell">Value</span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">attachments</span>
+                        <span id="attachments" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">cc</span>
+                        <span id="cc" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">conversationId</span>
+                        <span id="conversationId" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">from</span>
+                        <span id="from" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">internetMessageId</span>
+                        <span id="internetMessageId" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">normalizedSubject</span>
+                        <span id="normalizedSubject" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">sender</span>
+                        <span id="sender" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">subject</span>
+                        <span id="subject" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">to</span>
+                        <span id="to" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">body length</span>
+                        <span id="bodylength" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">body</span>
+                        <span id="body" class="ms-Table-cell"></span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="ms-Grid-row">
-            <div id="appointment-props" class="ms-Grid-row ">
-                <div class="ms-Grid-col ms-u-sm12">
-                    <h2 class="ms-font-l" onclick="toggleVisibility('appointmentPropertiesTable');">Appointment-specific properties</h2>
-                    <div class="ms-Table" id="appointmentPropertiesTable">
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell">Property</span>
-                            <span class="ms-Table-cell">Value</span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">attachments</span>
-                            <span id="appt-attachments" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">end</span>
-                            <span id="end" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">location</span>
-                            <span id="location" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">normalizedSubject</span>
-                            <span id="appt-normalizedSubject" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">optionalAttendees</span>
-                            <span id="optionalAttendees" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">organizer</span>
-                            <span id="organizer" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">requiredAttendees</span>
-                            <span id="requiredAttendees" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">resources</span>
-                            <span id="resources" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">start</span>
-                            <span id="start" class="ms-Table-cell"></span>
-                        </div>
-                        <div class="ms-Table-row">
-                            <span class="ms-Table-cell ms-fontWeight-semibold">subject</span>
-                            <span id="appt-subject" class="ms-Table-cell"></span>
-                        </div>
+        <div class="ms-Grid-row" id="appointment-props">
+            <div class="ms-Grid-col ms-u-sm12">
+                <h2 class="ms-font-l" onclick="toggleVisibility('appointmentPropertiesTable');">Appointment-specific properties</h2>
+                <div class="ms-Table" id="appointmentPropertiesTable" style="display:none;">
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell">Property</span>
+                        <span class="ms-Table-cell">Value</span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">attachments</span>
+                        <span id="appt-attachments" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">end</span>
+                        <span id="end" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">location</span>
+                        <span id="location" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">normalizedSubject</span>
+                        <span id="appt-normalizedSubject" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">optionalAttendees</span>
+                        <span id="optionalAttendees" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">organizer</span>
+                        <span id="organizer" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">requiredAttendees</span>
+                        <span id="requiredAttendees" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">resources</span>
+                        <span id="resources" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">start</span>
+                        <span id="start" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">subject</span>
+                        <span id="appt-subject" class="ms-Table-cell"></span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Logging textarea -->
-    <div class="ms-TextField ms-TextField--multiline">
 
-        <label class="ms-Label">Log:</label>
-        <textarea class="ms-TextField-field" type="text" readonly value="" placeholder="" id="log"></textarea>
-    </div>
-
-    <!-- FabricUI component used for displaying notifications -->
-    <div class="ms-MessageBanner" style="position:absolute;bottom: 0;display:none;">
-        <div class="ms-MessageBanner-content">
-            <div class="ms-MessageBanner-text">
-                <div class="ms-MessageBanner-clipper">
-                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notificationHeader"></div>
-                    <div class="ms-font-m ms-fontWeight-semilight" id="notificationBody"></div>
-                </div>
-            </div>
-            <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
-            <div class="ms-MessageBanner-action"></div>
+        <!-- Logging textarea -->
+        <div class="ms-TextField ms-TextField--multiline">
+            <label class="ms-Label">Log:</label>
+            <textarea class="ms-TextField-field" type="text" readonly value="" placeholder="" id="log"></textarea>
         </div>
-        <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
-    </div>
 
+        <!-- FabricUI component used for displaying notifications -->
+        <div class="ms-MessageBanner" style="position:absolute;bottom: 0;display:none;">
+            <div class="ms-MessageBanner-content">
+                <div class="ms-MessageBanner-text">
+                    <div class="ms-MessageBanner-clipper">
+                        <div class="ms-font-m-plus ms-fontWeight-semibold" id="notificationHeader"></div>
+                        <div class="ms-font-m ms-fontWeight-semilight" id="notificationBody"></div>
+                    </div>
+                </div>
+                <button class="ms-MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+                <div class="ms-MessageBanner-action"></div>
+            </div>
+            <button class="ms-MessageBanner-close"> <i class="ms-Icon ms-Icon--x"></i> </button>
+        </div>
+    </div>
 </body>
 </html>

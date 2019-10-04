@@ -143,17 +143,17 @@ function displayMessageFormItemId(itemId) {
     Office.context.mailbox.displayMessageForm(itemId);
 }
 
-function getCallbackToken() {
-    log("Requesting callback token");
+function getRESTToken() {
+    log("Requesting REST token");
     Office.context.mailbox.getCallbackTokenAsync(function (result) {
         if (result.status === "succeeded") {
             // Use this token to call Web API
             var token = result.value;
-            $("#callbackTokenId").val(token);
+            $("#RESTTokenId").val(token);
             log(" - success", false);
         } else {
             log(" - FAILED", false);
-            $("#callbackTokenId").val("Error: " + result.error.code);
+            $("#RESTTokenId").val("Error: " + result.error.code);
             log("Error: " + result.error.code);
         }
     });
@@ -372,9 +372,9 @@ function saveAsync() {
     Office.context.mailbox.item.saveAsync(function (result) {
         if (result.status === "succeeded") {
             // Use this token to call Web API
+            log(" - complete", false);
             var token = result.value;
             $("#itemId").val(result.value);
-            log(" - complete", false);
         } else {
             log(" - FAILED", false);
             log("Error: " + result.error.code);
