@@ -111,10 +111,10 @@
                     </div>
                     <div class="ms-Table-row">
                         <span class="ms-Table-cell ms-fontWeight-semibold">
-                            <button type="button" onclick="removeAttachmentsButton();" id="removeAttachmentsButton" style="width:100%">Remove all attachments</button>
+                            <!--<button type="button" onclick="removeAttachmentsButton();" id="removeAttachmentsButton" style="width:100%">Remove all attachments</button>-->
                             <button type="button" onclick="removeAttachmentsRESTButton();" id="removeAttachmentsRESTButton" style="width:100%">Remove all attachments (REST)</button>
-                            <textarea id="attachmentsLog" style="width:100%"></textarea>
                         </span>
+                        <span class="ms-Table-cell">Note that you will not see the attachments removed when running in Outlook in cached mode until you switch out of the item then back again.  You also need to wait for Outlook's cache to update, which could take up to a minute.</span>
                     </div>
                     <hr />
                 </div>
@@ -212,7 +212,7 @@
         <div class="ms-Grid-row">
             <div id="appointment-props" class="ms-Grid-row ">
                 <div class="ms-Grid-col ms-u-sm12">
-                    <h2 class="ms-font-l"  onclick="toggleVisibility('appointmentPropertiesTable');">Appointment-specific properties</h2>
+                    <h2 class="ms-font-l" onclick="toggleVisibility('appointmentPropertiesTable');">Appointment-specific properties</h2>
                     <div class="ms-Table" id="appointmentPropertiesTable">
                         <div class="ms-Table-row">
                             <span class="ms-Table-cell">Property</span>
@@ -262,6 +262,13 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Logging textarea -->
+    <div class="ms-TextField ms-TextField--multiline">
+
+        <label class="ms-Label">Log:</label>
+        <textarea class="ms-TextField-field" type="text" readonly value="" placeholder="" id="log"></textarea>
     </div>
 
     <!-- FabricUI component used for displaying notifications -->

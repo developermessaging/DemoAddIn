@@ -13,25 +13,26 @@
     <!-- <script src="Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>  -->
     <!-- <script src="Scripts/Office/1/office.js" type="text/javascript"></script>  -->
 
-    <script src="/ExtensionPointForms/MessageComposeCommandSurface/MessageCompose.js" type="text/javascript"></script>
+    <script src="MessageCompose.js" type="text/javascript"></script>
 
     <!--Helper file to use Dialog API-->
     <!--<script src="DialogHelper.js" type="text/javascript"></script>-->
     <!-- For the Office UI Fabric, go to https://aka.ms/office-ui-fabric to learn more. -->
     <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.min.css" />
     <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css" />
-    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/10.0.0/css/fabric.min.css" />
-    <script src="/Scripts/fabric.min.js"></script>
+    <!--<link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/10.0.0/css/fabric.min.css" />
+    
+    <!--<script src="/Scripts/fabric.min.js"></script>
     <!-- To enable the offline use of Office UI Fabric, use: -->
     <!-- link rel="stylesheet" href="Content/fabric.min.css" -->
     <!-- link rel="stylesheet" href="Content/fabric.components.min.css" -->
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         var TextFieldElements = document.querySelectorAll(".ms-TextField");
         for (var i = 0; i < TextFieldElements.length; i++) {
             new fabric['TextField'](TextFieldElements[i]);
         }
     </script>
-
+        -->
 </head>
 <body class="ms-Fabric" dir="ltr">
     <div>
@@ -63,21 +64,52 @@
     </div>
     <div>
         <span class="ms-Label ms-font-m-plus">Item Properties</span>
+        <div class="ms-Grid-row">
+            <div class="ms-Grid-col ms-u-sm12">
+                <h2 class="ms-font-l" onclick="toggleVisibility('itemPropertiesTable');">Office.context.mailbox.Item properties</h2>
+                <div class="ms-Table" id="itemPropertiesTable" style="display:none;">
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell">Property</span>
+                        <span class="ms-Table-cell">Value</span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">dateTimeCreated</span>
+                        <span id="dateTimeCreated" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">dateTimeModified</span>
+                        <span id="dateTimeModified" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">itemClass</span>
+                        <span id="itemClass" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">itemId</span>
+                        <span id="itemId" class="ms-Table-cell"></span>
+                    </div>
+                    <div class="ms-Table-row">
+                        <span class="ms-Table-cell ms-fontWeight-semibold">itemType</span>
+                        <span id="itemType" class="ms-Table-cell"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
     <div>
         <div>
             <span class="ms-Label ms-font-m-plus">Item Actions</span>
         </div>
-        <!--Display Message Form button-->
-        <button class="ms-Button">
+        <!--Save button-->
+        <button class="ms-Button" onclick="saveAsync();" id="saveAsyncBtn">
             <span class="ms-Button-label">Save Async</span>
         </button>
-        <!---->
         <!--Item ID Text field-->
         <div class="ms-TextField">
-
             <label class="ms-Label">Item ID</label>
-            <input class="ms-TextField-field" readonly="readonly" type="text" value="some text" placeholder="">
+            <input class="ms-TextField-field" id="saveAsyncItemId" readonly="readonly" type="text" value="" placeholder="Id will be shown when item saved">
         </div>
     </div>
 
@@ -88,30 +120,37 @@
         <div>
             <span class="ms-Label ms-font-m-plus">Add Attachments</span>
         </div>
-        <!--Item ID Text field-->
+        <!--Attachment URL Text field-->
         <div class="ms-TextField">
-
             <label class="ms-Label">Url:</label>
             <input class="ms-TextField-field" type="text" value="" placeholder="Type in the URL where the file to be attached is located." id="fileAttachUrl">
         </div>
-        <!--Item ID Text field-->
+        <!--Attachment Filename Text field-->
         <div class="ms-TextField">
-
             <label class="ms-Label">File Name:</label>
             <input class="ms-TextField-field" type="text" value="" placeholder="Type the file name here. For example: image.png" id="fileAttachName">
         </div>
-        <!--Display Message Form button-->
-        <button class="ms-Button" id="attFileAttachmentAsyncBtn" onclick="addFileAttachmentAsyncCall">
+        <!--Add File Attachment button-->
+        <button class="ms-Button" id="addFileAttachmentAsyncBtn" onclick="addFileAttachmentAsyncCall();">
             <span class="ms-Button-label">Add File Attachment Async</span>
         </button>
-        <!---->
+        <!-- Remove all attachments buttons -->
+        <div>
+            <span class="ms-Label ms-font-m-plus">Remove Attachments</span>
+        </div>
+        <button class="ms-Button" id="removeAttachmentsButton" onclick="removeAttachmentsButton();">
+            <span class="ms-Button-label">Remove all attachments</span>
+        </button>
+        <button class="ms-Button" onclick="removeAttachmentsRESTButton();" id="removeAttachmentsRESTButton">
+            <span class="ms-Button-label">Remove all attachments (REST)</span>
+        </button>
 
     </div>
 
     <div class="ms-TextField ms-TextField--multiline">
 
         <label class="ms-Label">Log:</label>
-        <textarea class="ms-TextField-field" type="text" readonly value="" placeholder="" id="logFileld"></textarea>
+        <textarea class="ms-TextField-field" type="text" readonly value="" placeholder="" id="log"></textarea>
     </div>
 
 </body>

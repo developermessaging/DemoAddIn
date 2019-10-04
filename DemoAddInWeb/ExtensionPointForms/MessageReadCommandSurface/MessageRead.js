@@ -117,6 +117,23 @@
     }
 })();
 
+function log(logInfo, asNewLine) {
+    // Add the provided log text to the log window
+    if (asNewLine === undefined) { asNewLine = true; }
+    if (asNewLine) {
+        if ($('#log').val() === "") {
+            // Don't prepend a new line if there is nothing in the log
+            $('#log').text($('#log').val() + logInfo);
+        }
+        else {
+            $('#log').text($('#log').val() + "\n" + logInfo);
+        }
+    }
+    else {
+        $('#log').text($('#log').val() + logInfo);
+    }
+}
+
 function displayMessageForm() {
     if (!$("#specificItemId").val()) { $("#specificItemId").val(Office.context.mailbox.item.itemId); }
     displayMessageFormItemId($("#specificItemId").val());
@@ -127,13 +144,17 @@ function displayMessageFormItemId(itemId) {
 }
 
 function getCallbackToken() {
+    log("Requesting callback token");
     Office.context.mailbox.getCallbackTokenAsync(function (result) {
         if (result.status === "succeeded") {
             // Use this token to call Web API
             var token = result.value;
             $("#callbackTokenId").val(token);
+            log(" - success", false);
         } else {
+            log(" - FAILED", false);
             $("#callbackTokenId").val("Error: " + result.error.code);
+            log("Error: " + result.error.code);
         }
     });
 }
@@ -143,35 +164,39 @@ function getEWSCallbackToken() {
 }
 
 function getAccessToken() {
+    log("Requesting access token");
     Office.context.auth.getAccessTokenAsync(getAccessTokenCallback);
-    //Office.context.auth.getAccessTokenAsync(function (result) {
-    //    if (result.status === "succeeded") {
-    //         Use this token to call Web API
-    //        var token = result.value;
-    //        $("#accessTokenId").val(token);
-    //    } else {
-    //        $("#accessTokenId").val("Error: " + result.error.code);
-    //    }
-    //});
+
 }
 
-
 function getAccessTokenCallback(asyncResult) {
-    var token = asyncResult.value;
-    $("#callbackTokenId").val(token);
+    if (result.status === "succeeded") {
+        // Use this token to call Web API
+        var token = result.value;
+        $("#accessTokenId").val(token);
+        log(" - success", false);
+    } else {
+        log(" - FAILED", false);
+        $("#accessTokenId").val("Error: " + result.error.code);
+        log("Error: " + result.error.code);
+    }
+
 }
 
 function getBody() {
     var coercionType = Office.CoercionType.Html;
     if ($("#specificItemId").val() === "Text")
         coercionType = Office.CoercionType.Text;
+    log("Requesting item body");
     Office.context.mailbox.item.body.getAsync(coercionType, function (result) {
         if (result.status === "succeeded") {
-            // Use this token to call Web API
             var body = result.value;
             $("#bodyId").val(body);
+            log(" - complete");
         } else {
+            log(" - FAILED", false);
             $("#bodyId").val("Error: " + result.error.code);
+            log("Error: " + result.error.code);
         }
     });
 }
@@ -190,7 +215,6 @@ function toggleVisibility(toggleDivId) {
 function removeAttachmentsButton() {
     //removeAttachments(removeAttachmentsCallback);
     var item = Office.context.mailbox.item;
-    var log = "";
     if (item.attachments.length > 0) {
         // Remove the attachments
         for (i = 0; i < item.attachments.length; i++) {
@@ -199,13 +223,13 @@ function removeAttachmentsButton() {
                 attachment.id,
                 { asyncContext: null },
                 function (asyncResult) {
-                    $("#attachmentsLog").text($("#attachmentsLog").val() + " " + attachment.name + " removed");
+                    log(attachment.name + " removed");
                 }
             );
         }
     }
     else {
-        $("#attachmentsLog").text("No attachments found");
+        log("No attachments found");
     }
 }
 
@@ -263,9 +287,9 @@ function removeAttachments(callback) {
 
 function removeAttachmentsCallback(asyncResult) {
     if (asyncResult === true) {
-        $("#attachmentsLog").text("Attachment removed");
+        log("Attachment removed");
     } else {
-        $("#attachmentsLog").text("FAILED to remove attachment");
+        log("FAILED to remove attachment");
     }
 }
 
@@ -281,10 +305,9 @@ function removeAttachment(attachmentId, callback) {
                 type: 'DELETE',
                 headers: { 'Authorization': 'Bearer ' + asyncResult.value }
             }).done(function (result) {
-                console.log(result);
                 callback(true);
             }).fail(function (error) {
-                console.log(error);
+                log(error.statusText);
                 callback(false);
             });
         }
@@ -319,20 +342,20 @@ function getSubjectEWSRequest(id) {
 }
 
 function sendEWSRequest() {
-    $("#ewsResponse").text('Reading request');
+    log('Reading EWS request');
     var requestXml = $("#ewsRequest").val();
-    $("#ewsResponse").text('Request read');
+    log(' - complete', false);
     if (requestXml.length > 10) {
-        $("#ewsResponse").text('Sending request, length is ' + requestXml.length);
+        log('Sending EWS request, length is ' + requestXml.length);
         result = Office.context.mailbox.makeEwsRequestAsync(requestXml, sendEWSRequestCallback);
         if (result === null) {
-            $("#ewsResponse").text('Failed to send request');
+            log(' - FAILED', false);
         } else {
-            $("#ewsResponse").text('Request sent');
+            log(' - complete', false);
         }
     }
     else {
-        $("#ewsResponse").text('Invalid request');
+        log('Invalid request');
     }
 }
 
@@ -340,28 +363,33 @@ function sendEWSRequestCallback(asyncResult) {
     var result = asyncResult.value;
     var context = asyncResult.asyncContext;
 
-    $("#ewsResponse").val('Response received (' + asyncResult.status + ')');
+    log('EWS Response received (' + asyncResult.status + ')');
     if (asyncResult.status === "succeeded") {
         $("#ewsResponse").text(result);
     } else {
         $("#ewsResponse").text("Error: " + asyncResult.error.message);
+        log("Error: " + asyncResult.error.message);
     }
 }
 
 function saveAsync() {
+    log("Saving item");
     Office.context.mailbox.item.saveAsync(function (result) {
         if (result.status === "succeeded") {
             // Use this token to call Web API
             var token = result.value;
             $("#itemId").val(result.value);
+            log(" - complete", false);
         } else {
-            $("#itemId").val("Error: " + result.error.code);
+            log(" - FAILED", false);
+            log("Error: " + result.error.code);
         }
     });
 }
 
 // Helper function for displaying notifications
 function showNotification(header, content) {
+    log(header + ": " + content);
     $("#notificationHeader").text(header);
     $("#notificationBody").text(content);
     var element = document.querySelector('.ms-MessageBanner');
@@ -371,7 +399,7 @@ function showNotification(header, content) {
 
 function displayDialogAsync() {
     //Office.context.ui.displayDialogAsync('https://www.google.com', { height: 100, width: 100 }, dialogCallback );
-    Office.context.ui.displayDialogAsync(window.location.origin + "/MessageRead/Dialog.html", { height: 50, width: 50 }, dialogCallback);
+    Office.context.ui.displayDialogAsync(window.location.origin + "/Dialog/Dialog.html", { height: 50, width: 50 }, dialogCallback);
     ////IMPORTANT: IFrame mode only works in Online (Web) clients. Desktop clients (Windows, IOS, Mac) always display as a pop-up inside of Office apps. 
     //Office.context.ui.displayDialogAsync(window.location.origin + "/Dialog.html",
     //    { height: 50, width: 50, displayInIframe: true }, dialogCallback);
